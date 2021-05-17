@@ -9,16 +9,16 @@ namespace Crypto
     {
 
         private FileStream fi;
-        private StreamReader fird;
+        private BinaryReader fird;
         private FileStream fo;
-        private StreamReader ford;
+        private BinaryReader ford;
 
         public FileClass(String inputPath, String outputPath)
         {
             fi = File.Open(inputPath, FileMode.Open);
             fo = File.Open(outputPath, FileMode.CreateNew);
-            fird = new StreamReader(fi);
-            ford = new StreamReader(fo);
+            fird = new BinaryReader(fi);
+            ford = new BinaryReader(fo);
         }
 
 
