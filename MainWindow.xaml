@@ -1,0 +1,42 @@
+﻿<Window x:Class="Crypto.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Crypto"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="AsymCrypt" Height="450" Width="620">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Margin="20">
+            <Label Content="File:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
+            <TextBlock Height="24" Width="331" Margin="0,0,152,0" Name="filename" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#EEEEEE" />
+            <Button Margin="423,0,0,4">Select</Button>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Margin="20">
+            <Label Content="Output:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
+            <TextBlock Height="24" Width="331" Margin="0,0,152,0" Name="output" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#EEEEEE" />
+            <Button Margin="423,0,0,4">Select Folder</Button>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Margin="20">
+            <Label Content="Private Key:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
+            <TextBox Height="24" Width="400" Name="privateKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" />
+            <Button Margin="494,0,0,4">Random</Button>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Margin="20">
+            <Label Content="Public Key:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
+            <TextBox Height="24" Width="401" Name="_publicKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" />
+            <Button Margin="494,0,0,4" IsEnabled="False">Generate</Button>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Margin="20">
+            <Label Content="Checksum:" Height="28" Width="75" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
+            <TextBox Height="24" Width="460" Name="checkSum" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#FFFFFF" Margin="85,4,0,0" />
+        </Grid>
+        <Grid DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="10" Width="60" Height="30" IsEnabled="False">Encrypt</Button>
+                <Button Margin="10" Width="60" Height="30" IsEnabled="False">Decrypt</Button>
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>
