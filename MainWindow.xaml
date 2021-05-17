@@ -11,12 +11,12 @@
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="File:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
             <TextBlock Height="24" Width="331" Margin="0,0,152,0" Name="filename" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#EEEEEE" />
-            <Button Margin="423,0,0,4">Select</Button>
+            <Button Margin="423,0,0,4" Click="InputSelect_Click">Select</Button>
         </Grid>
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="Output:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
             <TextBlock Height="24" Width="331" Margin="0,0,152,0" Name="output" HorizontalAlignment="Right" VerticalAlignment="Top" Background="#EEEEEE" />
-            <Button Margin="423,0,0,4">Select Folder</Button>
+            <Button Margin="423,0,0,4" Click="OutputFolderSelect_Click">Select Folder</Button>
         </Grid>
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="Private Key:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />

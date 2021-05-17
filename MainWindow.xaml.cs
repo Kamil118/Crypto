@@ -11,7 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Forms;
+using System.IO;
 
 namespace Crypto
 {
@@ -20,9 +21,29 @@ namespace Crypto
     /// </summary>
     public partial class MainWindow : Window
     {
+        private String inputfilepath;
+        private String inputname;
+        private String outputfilepath;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void InputSelect_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.ShowDialog();
+            var filepath = dlg.FileName;
+            inputfilepath = filepath;
+            inputname = Path.GetFileName(filepath);
+            filename.Text = inputfilepath;
+        }
+
+        private void OutputFolderSelect_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new FolderBrowserDialog() { Description = "Select directory where new file should be saved" };
+            dlg.ShowDialog();
+            outputfilepath = dlg.SelectedPath;
         }
     }
 }
