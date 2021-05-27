@@ -25,7 +25,7 @@ namespace Crypto
         //decrypt and encrypt should calculate hash of decrypted file as they are processing the data
         public void encrypt(String key)
         {
-
+            
         }
 
         public void decrypt(String key)
