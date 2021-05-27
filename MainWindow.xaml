@@ -20,13 +20,13 @@
         </Grid>
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="Private Key:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
-            <TextBox Height="24" Width="400" Name="privateKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" />
+            <TextBox Height="24" Width="400" Name="privateKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" TextChanged="privateKey_TextInput"/>
             <Button Margin="494,0,0,4">Random</Button>
         </Grid>
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="Public Key:" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
-            <TextBox Height="24" Width="401" Name="_publicKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" />
-            <Button Margin="494,0,0,4" IsEnabled="False">Generate</Button>
+            <TextBox Height="24" Width="401" Name="_publicKey" HorizontalAlignment="Center" VerticalAlignment="Top" Background="#FFFFFF" TextChanged="_publicKey_TextInput" />
+            <Button Margin="494,0,0,4" Name="generateButton" IsEnabled="False">Generate</Button>
         </Grid>
         <Grid DockPanel.Dock="Top" Margin="20">
             <Label Content="Checksum:" Height="28" Width="75" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" />
@@ -34,8 +34,8 @@
         </Grid>
         <Grid DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Margin="10" Width="60" Height="30" IsEnabled="False">Encrypt</Button>
-                <Button Margin="10" Width="60" Height="30" IsEnabled="False">Decrypt</Button>
+                <Button Name="encryptButton" Margin="10" Width="60" Height="30" IsEnabled="False" Click="encryptButton_Click">Encrypt</Button>
+                <Button Name="decryptButton" Margin="10" Width="60" Height="30" IsEnabled="False" Click="decryptButton_Click">Decrypt</Button>
             </StackPanel>
         </Grid>
     </DockPanel>
