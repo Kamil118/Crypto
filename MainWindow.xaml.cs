@@ -14,6 +14,11 @@ using System.Windows.Navigation;
 using System.Windows.Forms;
 using System.IO;
 using System.Security.Cryptography;
+using Org.BouncyCastle;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.OpenSsl;
+
 namespace Crypto
 {
     /// <summary>
@@ -47,7 +52,7 @@ namespace Crypto
         {
             if(validateKey(private_key))
             {
-                generateButton.IsEnabled = true;
+                //generateButton.IsEnabled = true; not implemented yet
             }
             else
             {
@@ -96,20 +101,45 @@ namespace Crypto
 
         private void OutputFolderSelect_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new FolderBrowserDialog() { Description = "Select directory where new file should be saved" };
-            dlg.ShowDialog();
-            setOutputDir(dlg.SelectedPath);
+            var dlg = new SaveFileDialog();
+            
+            if(dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                setOutputDir(dlg.FileName);
+            }
+            else
+            {
+                setOutputDir("");
+            }
             update_buttons();
         }
 
         private void encryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            FileClass fc = new FileClass(inputfilepath, outputfilepath);
+            var rsakey = RSA.Create();
+            var rsakey2 = new RSACryptoServiceProvider(2048);
+            int pub_key_len;
+            int priv_key_len;
+            rsakey.ImportRSAPrivateKey(Convert.FromBase64String(private_key), out priv_key_len);
+            rsakey.ImportSubjectPublicKeyInfo(Convert.FromBase64String(public_key), out pub_key_len);
+            rsakey2.ImportParameters(rsakey.ExportParameters(false));
+            fc.encrypt(rsakey2);
+            System.Windows.Forms.MessageBox.Show("Encryption Finished");
         }
 
         private void decryptButton_Click(object sender, RoutedEventArgs e)
         {
-
+            FileClass fc = new FileClass(inputfilepath, Path.GetDirectoryName(outputfilepath)+"\\");
+            var rsakey = RSA.Create();
+            var rsakey2 = new RSACryptoServiceProvider(2048);
+            int pub_key_len;
+            int priv_key_len;
+            rsakey.ImportRSAPrivateKey(Convert.FromBase64String(private_key), out priv_key_len);
+            rsakey.ImportSubjectPublicKeyInfo(Convert.FromBase64String(public_key), out pub_key_len);
+            rsakey2.ImportParameters(rsakey.ExportParameters(false));
+            fc.decrypt(rsakey2,Path.GetFileName(outputfilepath));
+            System.Windows.Forms.MessageBox.Show("Decryption Finished");
         }
 
         private void _publicKey_TextInput(object sender, TextChangedEventArgs e)
@@ -122,6 +152,23 @@ namespace Crypto
         private void privateKey_TextInput(object sender, TextChangedEventArgs e)
         {
             private_key = privateKey.Text;
+            update_buttons();
+        }
+
+        private void Random_Click(object sender, RoutedEventArgs e)
+        {
+            var rsa = new RSACryptoServiceProvider(2048);
+            var keyPair = DotNetUtilities.GetRsaKeyPair(rsa);
+            var sw = new StringWriter();
+            var pw = new PemWriter(sw);
+            pw.WriteObject(keyPair.Private);
+            privateKey.Text = sw.ToString().Replace("-----BEGIN RSA PRIVATE KEY-----\r\n","").Replace("\r\n-----END RSA PRIVATE KEY-----\r\n", "");
+            sw = new StringWriter();
+            pw = new PemWriter(sw);
+            pw.WriteObject(keyPair.Public);
+            _publicKey.Text = sw.ToString().Replace("-----BEGIN PUBLIC KEY-----\r\n", "").Replace("\r\n-----END PUBLIC KEY-----\r\n", "");
+            private_key = privateKey.Text;
+            public_key = _publicKey.Text;
             update_buttons();
         }
     }
