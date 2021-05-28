@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Forms;
 using System.IO;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Pkcs;
 using Org.BouncyCastle;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -119,13 +120,21 @@ namespace Crypto
             FileClass fc = new FileClass(inputfilepath, outputfilepath);
             var rsakey = RSA.Create();
             var rsakey2 = new RSACryptoServiceProvider(2048);
-            int pub_key_len;
-            int priv_key_len;
-            rsakey.ImportRSAPrivateKey(Convert.FromBase64String(private_key), out priv_key_len);
-            rsakey.ImportSubjectPublicKeyInfo(Convert.FromBase64String(public_key), out pub_key_len);
+            rsakey.ImportSubjectPublicKeyInfo(Convert.FromBase64String(public_key), out _);
             rsakey2.ImportParameters(rsakey.ExportParameters(false));
-            fc.encrypt(rsakey2);
+            try
+            {
+                fc.encrypt(rsakey2);
+            }
+            catch (System.IO.IOException ex)
+            {
+                System.Windows.Forms.MessageBox.Show("IO Error");
+                fc.Dispose();
+                return;
+            }
+
             System.Windows.Forms.MessageBox.Show("Encryption Finished");
+            fc.Dispose();
         }
 
         private void decryptButton_Click(object sender, RoutedEventArgs e)
@@ -133,13 +142,21 @@ namespace Crypto
             FileClass fc = new FileClass(inputfilepath, Path.GetDirectoryName(outputfilepath)+"\\");
             var rsakey = RSA.Create();
             var rsakey2 = new RSACryptoServiceProvider(2048);
-            int pub_key_len;
-            int priv_key_len;
-            rsakey.ImportRSAPrivateKey(Convert.FromBase64String(private_key), out priv_key_len);
-            rsakey.ImportSubjectPublicKeyInfo(Convert.FromBase64String(public_key), out pub_key_len);
-            rsakey2.ImportParameters(rsakey.ExportParameters(false));
-            fc.decrypt(rsakey2,Path.GetFileName(outputfilepath));
+            rsakey.ImportRSAPrivateKey(Convert.FromBase64String(private_key), out _);
+            rsakey2.ImportParameters(rsakey.ExportParameters(true));
+            try
+            {
+                fc.decrypt(rsakey2, Path.GetFileName(outputfilepath));
+            }
+            catch (System.IO.IOException ex)
+            {
+                System.Windows.Forms.MessageBox.Show("IO Error");
+                fc.Dispose();
+                return;
+            }
+            
             System.Windows.Forms.MessageBox.Show("Decryption Finished");
+            fc.Dispose();
         }
 
         private void _publicKey_TextInput(object sender, TextChangedEventArgs e)
