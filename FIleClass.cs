@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -8,18 +8,18 @@ namespace Crypto
 {
     class FileClass : IDisposable
     {
-      
+
         private FileStream fi;
         private BinaryReader fird;
         private FileStream fo;
         private BinaryWriter ford;
-      
+
         private String inputPath;
         private String outputPath;
         public FileClass(String inputPath, String outputPath)
         {
             this.inputPath = inputPath;
-            this.outputPath = outputPath;                    
+            this.outputPath = outputPath;
         }
 
 
@@ -34,7 +34,7 @@ namespace Crypto
             fird = new BinaryReader(fi);
             ford = new BinaryWriter(fo);
             try
-            {         
+            {
                 int size = (rsa.KeySize - 384) / 8 + 37;
                 int iter = (int)fi.Length / size;
                 byte[] encryptedbuffer = new byte[size];
@@ -49,8 +49,8 @@ namespace Crypto
                 for (int i = 0; i <= iter; i++)
                 {
                     buffer = fird.ReadBytes(size);
-                    hashbuffer1 =  hash.ComputeHash(buffer);
-                    for(int j = 0; j < 20; ++j)
+                    hashbuffer1 = hash.ComputeHash(buffer);
+                    for (int j = 0; j < 20; ++j)
                     {
                         hashbuffer[j] = (byte)(hashbuffer[j] ^ hashbuffer1[j]);
                     }
@@ -68,15 +68,15 @@ namespace Crypto
             }
         }
 
-        public void decrypt( RSACryptoServiceProvider rsa,string filename)
+        public void decrypt(RSACryptoServiceProvider rsa, string filename)
         {
             fi = File.Open(inputPath, FileMode.Open);
-            
+
             fird = new BinaryReader(fi);
-            
+
             try
             {
-                HashAlgorithm hash = SHA1.Create();            
+                HashAlgorithm hash = SHA1.Create();
                 int size = rsa.KeySize / 8;
                 byte[] decryptedbuffer = new byte[size];
                 byte[] buffer = new byte[size];
@@ -85,27 +85,28 @@ namespace Crypto
                 byte[] hashbuffer2;
                 string fileext;
                 hashbuffer2 = fird.ReadBytes(20);
-                int extsize= 0;
+                int extsize = 0;
                 byte[] tmp = fird.ReadBytes(8);
                 for (int i = 0; i < 8; ++i)
-                {                   
+                {
                     if (tmp[i] != 0)
                     {
                         extsize++;
                     }
                 }
                 byte[] tmp2 = new byte[extsize];
-                for (int i = 0; i < extsize; ++i){
+                for (int i = 0; i < extsize; ++i)
+                {
                     tmp2[i] = tmp[i];
                 }
                 string fileName1 = Encoding.ASCII.GetString(tmp2);
-                filename+= fileName1;
-                fo = File.Open(outputPath+filename, FileMode.CreateNew);
+                filename += fileName1;
+                fo = File.Open(outputPath + filename, FileMode.CreateNew);
                 ford = new BinaryWriter(fo);
                 string filename2 = filename;
 
-                
-                int iter = ((int)fi.Length-28) / size;
+
+                int iter = ((int)fi.Length - 28) / size;
                 for (int i = 0; i < iter; i++)
                 {
                     buffer = fird.ReadBytes(size);
@@ -132,7 +133,7 @@ namespace Crypto
             {
             }
         }
-       
+
         public void Dispose()
         {
             fi.Close();
