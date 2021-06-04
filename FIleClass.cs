@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -35,7 +35,7 @@ namespace Crypto
             ford = new BinaryWriter(fo);
             try
             {
-                int size = (rsa.KeySize - 384) / 8 + 37;
+                int size = (rsa.KeySize - 384) / 8 ;
                 int iter = (int)fi.Length / size;
                 byte[] encryptedbuffer = new byte[size];
                 byte[] buffer = new byte[size];
@@ -54,7 +54,7 @@ namespace Crypto
                     {
                         hashbuffer[j] = (byte)(hashbuffer[j] ^ hashbuffer1[j]);
                     }
-                    encryptedbuffer = rsa.Encrypt(buffer, false);
+                    encryptedbuffer = rsa.Encrypt(buffer, true);
                     ford.Write(encryptedbuffer);
                 }
 
@@ -77,7 +77,7 @@ namespace Crypto
             try
             {
                 HashAlgorithm hash = SHA1.Create();
-                int size = rsa.KeySize / 8;
+                int size = 256;
                 byte[] decryptedbuffer = new byte[size];
                 byte[] buffer = new byte[size];
                 byte[] hashbuffer1 = new byte[256];
@@ -92,6 +92,11 @@ namespace Crypto
                     if (tmp[i] != 0)
                     {
                         extsize++;
+                        
+                    }
+                    if (tmp[i] == 0)
+                    {
+                        break;
                     }
                 }
                 byte[] tmp2 = new byte[extsize];
@@ -110,7 +115,7 @@ namespace Crypto
                 for (int i = 0; i < iter; i++)
                 {
                     buffer = fird.ReadBytes(size);
-                    decryptedbuffer = rsa.Decrypt(buffer, false);
+                    decryptedbuffer = rsa.Decrypt(buffer, true);
                     hashbuffer1 = hash.ComputeHash(decryptedbuffer);
                     for (int j = 0; j < 20; ++j)
                     {
